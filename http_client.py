@@ -37,13 +37,13 @@ class LowLayerHTTPClient():
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.connect((self.request['host'], self.request['port']))
 
-    def send(self, body=False):
+    def send(self, header=False):
         '''Send HTTP request'''
-        if not body:
-            self.request['body'] = body
- 
+        if not self.request['header']:
+            self.request['header'] = header
+
         encode = self.request['encode']
-        self.sock.send(body.encode(encode))
+        self.sock.send(self.request['header'].encode(encode))
 
     def get_response(self):
         '''Get HTTP Response'''
@@ -51,7 +51,7 @@ class LowLayerHTTPClient():
 
         # get data
         chunk = 'null'
-        while chunk!=b'':
+        while chunk:
             chunk = self.sock.recv(4096)
             data.append(chunk)
 
