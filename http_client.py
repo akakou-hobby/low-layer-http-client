@@ -24,7 +24,7 @@ class LowLayerHTTPClient():
         'decode': 'utf-8'
     }
 
-    def __init__(self, host, port, request=False):
+    def __init__(self, host='localhost', port=80, request=False):
         '''Get arguments and set information for response packet.'''
         if not request:
             self.request['host'] = host
