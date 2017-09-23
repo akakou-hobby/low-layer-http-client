@@ -1,3 +1,4 @@
+# coding:utf-8
 '''Low Layer HTTP Client
 
 low_layler_http_client.py
@@ -6,7 +7,7 @@ low_layler_http_client.py
 import socket
 
 
-class TCP():
+class LowLayerHTTPClient():
     '''Send http request with TCP and get response.'''
     request = {
         'host': '',
@@ -36,9 +37,11 @@ class TCP():
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.connect((self.request['host'], self.request['port']))
 
-    def send(self, body):
+    def send(self, body=False):
         '''Send HTTP request'''
-        self.request['body'] = body
+        if not body:
+            self.request['body'] = body
+ 
         encode = self.request['encode']
         self.sock.send(body.encode(encode))
 
@@ -46,16 +49,19 @@ class TCP():
         '''Get HTTP Response'''
         data = []
 
+        # get data
         chunk = 'null'
         while chunk!=b'':
             chunk = self.sock.recv(4096)
             data.append(chunk)
 
+        # convert byte to str
         self.response['raw'] = b''.join(data)
         decode = self.response['decode']
         self.response['all'] = self.response['raw'].decode(decode)
-        divide_response = self.response['all'].split('\r\n\r\n')
 
+        # divede to header and body
+        divide_response = self.response['all'].split('\r\n\r\n')
         self.response['header'] = ''.join(divide_response[0])
         self.response['body'] = ''.join(divide_response[1:])
 
