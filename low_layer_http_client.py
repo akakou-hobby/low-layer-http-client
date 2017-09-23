@@ -23,10 +23,13 @@ class TCP():
         'decode': 'utf-8'
     }
 
-    def __init__(self, host, port):
+    def __init__(self, host, port, request=False):
         '''Get arguments and set information for response packet.'''
-        self.request['host'] = host
-        self.request['port'] = port
+        if not request:
+            self.request['host'] = host
+            self.request['port'] = port
+        else:
+            self.request = request
 
     def connect(self):
         '''Connect to target server.'''
